@@ -1,0 +1,27 @@
+import re
+import html
+import sqlite3
+
+def clean_needless_tags(string):
+    regular = re.sub('<[^<]+?>', '', string)
+    return html.unescape(regular).replace('\xa0', '')
+
+def clean_needless_fileds(path):
+    cursor = sqlite3.connect(path).cursor()
+    data = cursor.execute("SELECT otherInfo, skills, ID FROM works;")
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return data
+
+def create_cleaned_data():
+    cleaned_data = {}
+    for row in clean_needless_fileds('works_db'):
+        cleaned_info[row[0]] = (clean_needless_tags(row[1]), clean_needless_tags(row[2]))
+    return cleaned_data
+
+def fill_data_base():
+    for id, v in create_cleaned_data():
+        cursor.execute("UPDATE works SET skills = {v[0]}, otherInfo = {v[1]} WHERE ID = {id}")
+    
+fill_data_base()
